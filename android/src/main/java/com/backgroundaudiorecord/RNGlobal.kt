@@ -1,4 +1,7 @@
 package com.backgroundaudiorecord
 
-class RNGlobal {
+import com.facebook.react.bridge.ReactApplicationContext
+
+object RNGlobal {
+  lateinit var reactContext: ReactApplicationContext
 }

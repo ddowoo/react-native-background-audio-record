@@ -8,6 +8,7 @@ import com.facebook.react.uimanager.ViewManager
 
 class BackgroundAudioRecordPackage : ReactPackage {
   override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
+    RNGlobal.reactContext = reactContext
     return listOf(BackgroundAudioRecordModule(reactContext))
   }
 

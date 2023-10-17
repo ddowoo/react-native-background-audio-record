@@ -1,2 +1,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+  <uses-permission android:name="android.permission.RECORD_AUDIO" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+  <application>
+    <service
+      android:name=".AudioService"
+      android:enabled="true"
+      android:exported="true"
+      android:foregroundServiceType="microphone"
+      android:visibleToInstantApps="true"
+      android:directBootAware="true"
+
+      ></service>
+  </application>
 </manifest>
