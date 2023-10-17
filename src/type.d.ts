@@ -1,16 +1,16 @@
 type serviceNoticationConfig = {
-  channelName: string?;
-  contentTitle: string?;
-  contentText: string?;
+  channelName?: string;
+  contentTitle?: string;
+  contentText?: string;
 };
 
 type audioResource = {
-  audioSource: number?;
-  audioOutputFormat: number?;
-  audioEncoder: number?;
-  audioSamplingRate: number?;
-  audioEncodingBitRate: number?;
-  audioChannels: number?;
+  audioSource?: number;
+  audioOutputFormat?: number;
+  audioEncoder?: number;
+  audioSamplingRate?: number;
+  audioEncodingBitRate?: number;
+  audioChannels?: number;
 };
 
 type audioConfig = {
