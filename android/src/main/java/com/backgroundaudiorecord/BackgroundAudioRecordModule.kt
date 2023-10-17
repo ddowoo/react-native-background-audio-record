@@ -26,42 +26,39 @@ class BackgroundAudioRecordModule(reactContext: ReactApplicationContext) :
 
   @ReactMethod
   fun recordOnBackground(path:String?, audioConfig: ReadableMap? ,serviceNotification:ReadableMap?, promise: Promise) {
-    serviceIntent = Intent(reactContext, AudioService::class.java)
-    Log.d("DEV_LOG","0")
+    if(RNGlobal.isRecording == false){
+      serviceIntent = Intent(reactContext, AudioService::class.java)
 
-    val appName = RNGlobal.reactContext.applicationInfo.loadLabel(reactContext.packageManager).toString()
+      val appName = RNGlobal.reactContext.applicationInfo.loadLabel(reactContext.packageManager).toString()
 
-    // pass params to Servcie
-    if(audioConfig!=null){
-      Log.d("DEV_LOG","1")
+      // pass params to Servcie
       //filePath
-      filePath = audioConfig.getString("path") ?: filePath
-      serviceIntent.putExtra("path",  filePath );
-      Log.d("DEV_LOG","2")
+      serviceIntent.putExtra("path", path ?:  filePath );
 
       //AudioConfig
-      serviceIntent.putExtra("audioSource",  if( audioConfig.hasKey("audioSource"))  audioConfig.getInt("audioSource") else MediaRecorder.AudioSource.MIC)
-      serviceIntent.putExtra("outputFormat", if( audioConfig.hasKey("outputFormat"))  audioConfig.getInt("outputFormat") else  MediaRecorder.OutputFormat.MPEG_4)
-      serviceIntent.putExtra("audioEncoder", if( audioConfig.hasKey("audioEncoder"))  audioConfig.getInt("audioEncoder") else  MediaRecorder.AudioEncoder.AAC)
-      serviceIntent.putExtra("audioSamplingRate",  if( audioConfig.hasKey("audioSamplingRate"))  audioConfig.getInt("audioSamplingRate") else  48000)
-      serviceIntent.putExtra("audioEncodingBitRate", if( audioConfig.hasKey("audioEncodingBitRate"))  audioConfig.getInt("audioEncodingBitRate") else 128000)
-      serviceIntent.putExtra("audioChannels", if( audioConfig.hasKey("audioChannels"))  audioConfig.getInt("audioChannels") else 2)
-      Log.d("DEV_LOG","3")
+      if(audioConfig != null){
+       serviceIntent.putExtra("audioSource",  if( audioConfig.hasKey("audioSource"))  audioConfig.getInt("audioSource") else MediaRecorder.AudioSource.MIC)
+       serviceIntent.putExtra("outputFormat", if( audioConfig.hasKey("outputFormat"))  audioConfig.getInt("outputFormat") else  MediaRecorder.OutputFormat.MPEG_4)
+       serviceIntent.putExtra("audioEncoder", if( audioConfig.hasKey("audioEncoder"))  audioConfig.getInt("audioEncoder") else  MediaRecorder.AudioEncoder.AAC)
+       serviceIntent.putExtra("audioSamplingRate",  if( audioConfig.hasKey("audioSamplingRate"))  audioConfig.getInt("audioSamplingRate") else  48000)
+       serviceIntent.putExtra("audioEncodingBitRate", if( audioConfig.hasKey("audioEncodingBitRate"))  audioConfig.getInt("audioEncodingBitRate") else 128000)
+       serviceIntent.putExtra("audioChannels", if( audioConfig.hasKey("audioChannels"))  audioConfig.getInt("audioChannels") else 2)
 
+     }
       //NotificationConfig
-      serviceIntent.putExtra("channelName",  if( audioConfig.hasKey("channelName"))  audioConfig.getInt("channelName") else "DEFAULT")
-      serviceIntent.putExtra("contentText", if( audioConfig.hasKey("contentText"))  audioConfig.getInt("contentText") else appName)
-      serviceIntent.putExtra("contentTitle",  if( audioConfig.hasKey("contentTitle"))  audioConfig.getInt("contentTitle") else "recoding now...")
-      Log.d("DEV_LOG","4")
+     if(serviceNotification != null){
+       serviceIntent.putExtra("channelName",  if( serviceNotification.hasKey("channelName"))  serviceNotification.getInt("channelName") else "DEFAULT")
+       serviceIntent.putExtra("contentText", if( serviceNotification.hasKey("contentText"))  serviceNotification.getInt("contentText") else appName)
+       serviceIntent.putExtra("contentTitle",  if( serviceNotification.hasKey("contentTitle"))  serviceNotification.getInt("contentTitle") else "recoding now...")
+     }
 
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        reactContext.startForegroundService(serviceIntent)
+       } else {
+       reactContext.startService(serviceIntent)
+      }
+       promise.resolve(filePath)
     }
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      reactContext.startForegroundService(serviceIntent)
-    } else {
-      reactContext.startService(serviceIntent)
-    }
-    promise.resolve("file:///$filePath")
   }
 
   @ReactMethod

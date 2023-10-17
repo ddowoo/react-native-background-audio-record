@@ -1,35 +1,42 @@
-import * as React from 'react';
-
-import { StyleSheet, View, Button } from 'react-native';
+import React from 'react';
+import { Button, StyleSheet, View } from 'react-native';
 import {
   recordOnBackground,
   stopRecord,
 } from 'react-native-background-audio-record';
 import RNFS from 'react-native-fs';
 
-export default function App() {
-  const onPressButton = () => {
-    const path = `${RNFS.DownloadDirectoryPath}/sound.mp3`;
+// const audioRecorderPlayer = new AudioRecorderPlayer();
 
+const App = () => {
+  const path = `${RNFS.DownloadDirectoryPath}/sound.mp3`;
+
+  const onPressRecord = async () => {
     recordOnBackground(path);
   };
 
-  const onPressStop = () => {
-    stopRecord();
+  const onPressStop = () => stopRecord();
+
+  const onPressRecordPlay = () => {
+    // audioRecorderPlayer.startPlayer(path);
   };
 
   return (
-    <View style={styles.container}>
-      <Button title="record" onPress={onPressButton} />
-      <Button title="stop" onPress={onPressStop} />
+    <View style={styles.background}>
+      <Button title="record" onPress={onPressRecord}></Button>
+      <Button title="stop" onPress={onPressStop}></Button>
+      <Button title="Play" onPress={onPressRecordPlay}></Button>
     </View>
   );
-}
+};
+
+export default App;
 
 const styles = StyleSheet.create({
-  container: {
+  background: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#000',
   },
 });

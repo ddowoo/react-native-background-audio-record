@@ -8,13 +8,10 @@ async function reqeustRecordAndStoragePermission() {
       'android.permission.RECORD_AUDIO',
       'android.permission.WRITE_EXTERNAL_STORAGE',
     ]);
-    console.log('granted : ', granted);
     if (Object.values(granted).every((value) => value === 'granted'))
       return true;
     else return false;
   } catch (err) {
-    console.warn(err);
-
     return false;
   }
 }
@@ -49,8 +46,7 @@ export async function recordOnBackground(
           audioConfig,
           notificationConfig
         ).then((res: string) => {
-          console.log('___res');
-          console.log(res);
+          return res;
         });
       }
     }

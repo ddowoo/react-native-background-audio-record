@@ -32,6 +32,7 @@ class RNRecorder (private val reactContext: ReactContext){
 
   @RequiresApi(Build.VERSION_CODES.S)
   fun startRecording(path:String,audioCofnig: AudioConfig) {
+    RNGlobal.isRecording = true
     recorder = MediaRecorder(reactContext).apply {
       setAudioSource(audioCofnig?.AudioSource ?: MediaRecorder.AudioSource.MIC)
       setOutputFormat(audioCofnig?.OutputFormat ?: MediaRecorder.OutputFormat.MPEG_4)
@@ -39,6 +40,7 @@ class RNRecorder (private val reactContext: ReactContext){
       setAudioSamplingRate(audioCofnig?.AudioSamplingRate ?: 48000)
       setAudioEncodingBitRate(audioCofnig?.AudioEncodingBitRate ?: 128000)
       setAudioChannels(audioCofnig?.AudioChannels ?: 2)
+      Log.d("DEV_LOG", path)
       setOutputFile(path)
       try {
         prepare()
@@ -51,6 +53,7 @@ class RNRecorder (private val reactContext: ReactContext){
   }
 
   fun stopRecording () {
+    RNGlobal.isRecording = false
     recorder?.apply {
       stop()
       release()
