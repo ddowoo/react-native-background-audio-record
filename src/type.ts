@@ -1,10 +1,10 @@
-type serviceNoticationConfig = {
+export type serviceNoticationConfig = {
   channelName?: string;
   contentTitle?: string;
   contentText?: string;
 };
 
-type audioResource = {
+export type audioResource = {
   audioSource?: number;
   audioOutputFormat?: number;
   audioEncoder?: number;
@@ -13,7 +13,7 @@ type audioResource = {
   audioChannels?: number;
 };
 
-type audioConfig = {
+export type audioConfig = {
   audioSource?: number;
   OutputFormat?: number;
   audioEncoder?: number;

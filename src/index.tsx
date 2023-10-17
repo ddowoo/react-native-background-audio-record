@@ -1,4 +1,6 @@
 import { NativeModules, Platform, PermissionsAndroid } from 'react-native';
+import type { audioConfig, serviceNoticationConfig } from './type';
+export * from './type';
 
 async function reqeustRecordAndStoragePermission() {
   try {
@@ -47,6 +49,7 @@ export async function recordOnBackground(
           audioConfig,
           notificationConfig
         ).then((res: string) => {
+          console.log('___res');
           console.log(res);
         });
       }
@@ -61,7 +64,3 @@ export function stopRecord() {
     return BackgroundAudioRecord.stopRecord();
   }
 }
-
-export function playRecord() {}
-
-export function stopPlay() {}
