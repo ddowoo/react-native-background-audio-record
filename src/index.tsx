@@ -1,5 +1,5 @@
 import { NativeModules, Platform, PermissionsAndroid } from 'react-native';
-import type { audioConfig, serviceNoticationConfig } from './type';
+import type { AudioConfig, NoticationConfig } from './type';
 export * from './type';
 
 async function reqeustRecordAndStoragePermission() {
@@ -33,21 +33,23 @@ const BackgroundAudioRecord = NativeModules.BackgroundAudioRecord
       }
     );
 
-export async function recordOnBackground(
-  path?: string,
-  notificationConfig?: serviceNoticationConfig,
-  audioConfig?: audioConfig
-) {
+export async function startRecord({
+  path,
+  notificationConfig,
+  audioConfig,
+}: {
+  path?: string;
+  notificationConfig?: NoticationConfig;
+  audioConfig?: AudioConfig;
+} = {}) {
   try {
     if (Platform.OS === 'android') {
       if (await reqeustRecordAndStoragePermission()) {
-        BackgroundAudioRecord.recordOnBackground(
+        BackgroundAudioRecord.startRecord(
           path,
           audioConfig,
           notificationConfig
-        ).then((res: string) => {
-          return res;
-        });
+        );
       }
     }
   } catch (e) {
@@ -58,5 +60,17 @@ export async function recordOnBackground(
 export function stopRecord() {
   if (Platform.OS === 'android') {
     return BackgroundAudioRecord.stopRecord();
+  }
+}
+
+export function startAudio(path?: string) {
+  if (Platform.OS === 'android') {
+    BackgroundAudioRecord.playAudio(path);
+  }
+}
+
+export function stopAudio() {
+  if (Platform.OS === 'android') {
+    BackgroundAudioRecord.stopAudio();
   }
 }

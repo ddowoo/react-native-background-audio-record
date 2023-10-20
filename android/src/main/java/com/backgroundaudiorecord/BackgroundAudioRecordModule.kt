@@ -17,7 +17,9 @@ import com.facebook.react.bridge.ReadableMap
 class BackgroundAudioRecordModule(reactContext: ReactApplicationContext) :
   ReactContextBaseJavaModule(reactContext) {
 
-  var filePath =  "${RNGlobal.reactContext.cacheDir}/sound.mp3"
+  val recorder = RNRecorder(reactContext);
+
+  var filePath =  "${RNGlobal.reactContext.cacheDir}/sound.mp4"
   lateinit var serviceIntent: Intent;
 
   override fun getName(): String {
@@ -25,7 +27,12 @@ class BackgroundAudioRecordModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
-  fun recordOnBackground(path:String?, audioConfig: ReadableMap? ,serviceNotification:ReadableMap?, promise: Promise) {
+  fun startRecord(path:String?, audioConfig: ReadableMap? ,serviceNotification:ReadableMap?, promise: Promise) {
+
+    Log.d("DEV_LOG", path.toString())
+    Log.d("DEV_LOG", audioConfig.toString())
+    Log.d("DEV_LOG", serviceNotification.toString())
+
     if(RNGlobal.isRecording == false){
       serviceIntent = Intent(reactContext, AudioService::class.java)
 
@@ -47,9 +54,9 @@ class BackgroundAudioRecordModule(reactContext: ReactApplicationContext) :
      }
       //NotificationConfig
      if(serviceNotification != null){
-       serviceIntent.putExtra("channelName",  if( serviceNotification.hasKey("channelName"))  serviceNotification.getInt("channelName") else "DEFAULT")
-       serviceIntent.putExtra("contentText", if( serviceNotification.hasKey("contentText"))  serviceNotification.getInt("contentText") else appName)
-       serviceIntent.putExtra("contentTitle",  if( serviceNotification.hasKey("contentTitle"))  serviceNotification.getInt("contentTitle") else "recoding now...")
+       serviceIntent.putExtra("channelName",  if( serviceNotification.hasKey("channelName"))  serviceNotification.getString("channelName") else "DEFAULT")
+       serviceIntent.putExtra("contentText", if( serviceNotification.hasKey("contentText"))  serviceNotification.getString("contentText") else appName)
+       serviceIntent.putExtra("contentTitle",  if( serviceNotification.hasKey("contentTitle"))  serviceNotification.getString("contentTitle") else "recoding now...")
      }
 
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -57,13 +64,27 @@ class BackgroundAudioRecordModule(reactContext: ReactApplicationContext) :
        } else {
        reactContext.startService(serviceIntent)
       }
-       promise.resolve(filePath)
+
+      promise.resolve(filePath)
     }
   }
 
   @ReactMethod
   fun stopRecord(){
     reactContext.stopService(serviceIntent)
+  }
+
+  @ReactMethod
+  fun playAudio(path: String?){
+    if(RNGlobal.isRecording == false){
+
+      recorder.startPlaying(path ?: filePath)
+    }
+  }
+
+  @ReactMethod
+  fun stopAudio(){
+      recorder.stopPlaying();
   }
 
   companion object {

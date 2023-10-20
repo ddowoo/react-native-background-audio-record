@@ -1,31 +1,51 @@
 import React from 'react';
 import { Button, StyleSheet, View } from 'react-native';
 import {
-  recordOnBackground,
   stopRecord,
+  startRecord,
+  stopAudio,
+  startAudio,
+  type NoticationConfig,
+  type AudioConfig,
+  AudioSource,
+  OutputFormat,
+  AudioEncoder,
 } from 'react-native-background-audio-record';
 import RNFS from 'react-native-fs';
 
-// const audioRecorderPlayer = new AudioRecorderPlayer();
+const path = `${RNFS.DownloadDirectoryPath}/sound.mp4`;
+
+const notificationConfig: NoticationConfig = {
+  channelName: 'name',
+  contentText: 'text',
+  contentTitle: 'title',
+};
+
+const audioConfig: AudioConfig = {
+  audioSource: AudioSource.MIC,
+  outputFormat: OutputFormat.DEFAULT,
+  audioEncoder: AudioEncoder.AAC,
+  audioSamplingRate: 48000,
+  audioEncodingBitRate: 128000,
+  audioChannels: 2,
+};
 
 const App = () => {
-  const path = `${RNFS.DownloadDirectoryPath}/sound.mp3`;
-
-  const onPressRecord = async () => {
-    recordOnBackground(path);
-  };
+  const onPressRecord = async () =>
+    startRecord({ path, notificationConfig, audioConfig });
 
   const onPressStop = () => stopRecord();
 
-  const onPressRecordPlay = () => {
-    // audioRecorderPlayer.startPlayer(path);
-  };
+  const onPressRecordPlay = () => startAudio();
+
+  const onPressStopAudio = () => stopAudio();
 
   return (
     <View style={styles.background}>
       <Button title="record" onPress={onPressRecord}></Button>
       <Button title="stop" onPress={onPressStop}></Button>
       <Button title="Play" onPress={onPressRecordPlay}></Button>
+      <Button title="Audio Stop" onPress={onPressStopAudio}></Button>
     </View>
   );
 };

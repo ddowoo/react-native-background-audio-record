@@ -29,7 +29,7 @@ import kotlin.math.log10
 class RNRecorder (private val reactContext: ReactContext){
 
   private var recorder:MediaRecorder? = null;
-
+  private var player: MediaPlayer? = null;
   @RequiresApi(Build.VERSION_CODES.S)
   fun startRecording(path:String,audioCofnig: AudioConfig) {
     RNGlobal.isRecording = true
@@ -59,5 +59,22 @@ class RNRecorder (private val reactContext: ReactContext){
       release()
     }
     recorder = null
+  }
+
+   fun startPlaying(path:String) {
+    player = MediaPlayer().apply {
+      try {
+        setDataSource(path)
+        prepare()
+        start()
+      } catch (e: IOException) {
+        throw e
+      }
+    }
+  }
+
+   fun stopPlaying() {
+    player?.release()
+    player = null
   }
 }
