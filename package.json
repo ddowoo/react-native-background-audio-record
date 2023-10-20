@@ -1,6 +1,6 @@
 {
   "name": "react-native-background-audio-record",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "background audio record for android",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -36,10 +36,12 @@
   },
   "keywords": [
     "react-native",
-    "ios",
     "android"
   ],
-  "repository": "https://github.com/ddowoo/react-native-background-audio-record",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ddowoo/react-native-background-audio-record.git"
+  },
   "author": "ddowoo <ddowoot@gmail.com> (https://github.com/ddowoo)",
   "license": "MIT",
   "bugs": {
@@ -158,5 +160,8 @@
         }
       ]
     ]
+  },
+  "directories": {
+    "example": "example"
   }
 }
