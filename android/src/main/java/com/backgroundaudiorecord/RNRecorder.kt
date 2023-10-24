@@ -40,7 +40,6 @@ class RNRecorder (private val reactContext: ReactContext){
       setAudioSamplingRate(audioCofnig?.AudioSamplingRate ?: 48000)
       setAudioEncodingBitRate(audioCofnig?.AudioEncodingBitRate ?: 128000)
       setAudioChannels(audioCofnig?.AudioChannels ?: 2)
-      Log.d("DEV_LOG", path)
       setOutputFile(path)
       try {
         prepare()
@@ -68,7 +67,6 @@ class RNRecorder (private val reactContext: ReactContext){
         prepare()
         start()
       } catch (e: IOException) {
-        throw e
       }
     }
   }

@@ -20,7 +20,7 @@ data class AudioConfig(val AudioSource: Int?, val OutputFormat: Int?, val AudioE
 
 
 class AudioService: Service() {
-  var path = "${RNGlobal.reactContext.cacheDir}/sound.mp4"
+  var path = "${RNGlobal.reactContext.cacheDir}/sound.m4a"
 
   var audioSource:Int = MediaRecorder.AudioSource.MIC
   var outputFormat = MediaRecorder.OutputFormat.MPEG_4

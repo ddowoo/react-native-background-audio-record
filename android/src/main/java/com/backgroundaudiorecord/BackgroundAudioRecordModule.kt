@@ -19,7 +19,7 @@ class BackgroundAudioRecordModule(reactContext: ReactApplicationContext) :
 
   val recorder = RNRecorder(reactContext);
 
-  var filePath =  "${RNGlobal.reactContext.cacheDir}/sound.mp4"
+  var filePath =  "${RNGlobal.reactContext.cacheDir}/sound.m4a"
   lateinit var serviceIntent: Intent;
 
   override fun getName(): String {
@@ -29,9 +29,6 @@ class BackgroundAudioRecordModule(reactContext: ReactApplicationContext) :
   @ReactMethod
   fun startRecord(path:String?, audioConfig: ReadableMap? ,serviceNotification:ReadableMap?, promise: Promise) {
 
-    Log.d("DEV_LOG", path.toString())
-    Log.d("DEV_LOG", audioConfig.toString())
-    Log.d("DEV_LOG", serviceNotification.toString())
 
     if(RNGlobal.isRecording == false){
       serviceIntent = Intent(reactContext, AudioService::class.java)

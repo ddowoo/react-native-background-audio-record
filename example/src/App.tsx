@@ -13,7 +13,7 @@ import {
 } from 'react-native-background-audio-record';
 import RNFS from 'react-native-fs';
 
-const path = `${RNFS.DownloadDirectoryPath}/sound.mp4`;
+const path = `${RNFS.DownloadDirectoryPath}/sound.m4a`;
 
 const notificationConfig: NoticationConfig = {
   channelName: 'name',
@@ -36,7 +36,7 @@ const App = () => {
 
   const onPressStop = () => stopRecord();
 
-  const onPressRecordPlay = () => startAudio();
+  const onPressRecordPlay = () => startAudio(path);
 
   const onPressStopAudio = () => stopAudio();
 

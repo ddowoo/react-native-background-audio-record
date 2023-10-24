@@ -63,7 +63,7 @@ import {
 } from 'react-native-background-audio-record';
 import RNFS from 'react-native-fs';
 
-const path = `${RNFS.DownloadDirectoryPath}/sound.mp4`;
+const path = `${RNFS.DownloadDirectoryPath}/sound.m4a`;
 
 const notificationConfig: NoticationConfig = {
   channelName: 'name',
@@ -81,7 +81,7 @@ const audioConfig: AudioConfig = {
 };
 // ---------   recordOnBackground   ---------//
 // default path is
-// AOS : {cacheDir}/sound.mp4
+// AOS : {cacheDir}/sound.m4a
 recordOnBackground();
 
 recordOnBackground(path);
