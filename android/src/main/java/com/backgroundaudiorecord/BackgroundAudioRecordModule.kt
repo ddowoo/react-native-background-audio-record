@@ -1,12 +1,8 @@
 package com.backgroundaudiorecord
 
-import android.content.pm.PackageManager
 import android.os.Build
-import  android.Manifest
 import android.content.Intent
 import android.media.MediaRecorder
-import android.util.Log
-import androidx.core.app.ActivityCompat
 import com.backgroundaudiorecord.RNGlobal.reactContext
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
@@ -19,8 +15,8 @@ class BackgroundAudioRecordModule(reactContext: ReactApplicationContext) :
 
   val recorder = RNRecorder(reactContext);
 
-  var filePath =  "${RNGlobal.reactContext.cacheDir}/sound.m4a"
-  lateinit var serviceIntent: Intent;
+  var filePath =  "${reactContext.cacheDir}/sound.m4a"
+  var serviceIntent =Intent (reactContext, AudioService::class.java)
 
   override fun getName(): String {
     return NAME
@@ -29,17 +25,15 @@ class BackgroundAudioRecordModule(reactContext: ReactApplicationContext) :
   @ReactMethod
   fun startRecord(path:String?, audioConfig: ReadableMap? ,serviceNotification:ReadableMap?, promise: Promise) {
 
+    if(!RNRecorder.isRecording){
 
-    if(RNGlobal.isRecording == false){
-      serviceIntent = Intent(reactContext, AudioService::class.java)
-
-      val appName = RNGlobal.reactContext.applicationInfo.loadLabel(reactContext.packageManager).toString()
+      val appName = reactContext.applicationInfo.loadLabel(reactContext.packageManager).toString()
 
       // pass params to Servcie
       //filePath
       serviceIntent.putExtra("path", path ?:  filePath );
 
-      //AudioConfig
+      //AudioConfigㄷ랴ㅣㄷ
       if(audioConfig != null){
        serviceIntent.putExtra("audioSource",  if( audioConfig.hasKey("audioSource"))  audioConfig.getInt("audioSource") else MediaRecorder.AudioSource.MIC)
        serviceIntent.putExtra("outputFormat", if( audioConfig.hasKey("outputFormat"))  audioConfig.getInt("outputFormat") else  MediaRecorder.OutputFormat.MPEG_4)
@@ -68,13 +62,13 @@ class BackgroundAudioRecordModule(reactContext: ReactApplicationContext) :
 
   @ReactMethod
   fun stopRecord(){
+    recorder.stopRecording();
     reactContext.stopService(serviceIntent)
   }
 
   @ReactMethod
   fun playAudio(path: String?){
-    if(RNGlobal.isRecording == false){
-
+    if(!RNRecorder.isRecording){
       recorder.startPlaying(path ?: filePath)
     }
   }

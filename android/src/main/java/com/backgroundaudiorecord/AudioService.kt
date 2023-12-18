@@ -1,6 +1,5 @@
 package com.backgroundaudiorecord
 
-import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -13,7 +12,6 @@ import android.os.IBinder
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import org.json.JSONObject
 
 
 data class AudioConfig(val AudioSource: Int?, val OutputFormat: Int?, val AudioEncoder:Int?, val AudioSamplingRate: Int?, val AudioEncodingBitRate:Int?, val AudioChannels:Int?)
