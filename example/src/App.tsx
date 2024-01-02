@@ -1,15 +1,11 @@
 import React from 'react';
 import { Button, StyleSheet, View } from 'react-native';
-import {
-  stopRecord,
-  startRecord,
-  stopAudio,
-  startAudio,
-  type NoticationConfig,
-  type AudioConfig,
+import BgRecorder, {
   AudioSource,
   OutputFormat,
   AudioEncoder,
+  type NoticationConfig,
+  type AudioConfig,
 } from 'react-native-background-audio-record';
 import RNFS from 'react-native-fs';
 
@@ -30,15 +26,17 @@ const audioConfig: AudioConfig = {
   audioChannels: 2,
 };
 
+const recorder = BgRecorder.recorder();
+
 const App = () => {
   const onPressRecord = async () =>
-    startRecord({ path, notificationConfig, audioConfig });
+    recorder.startRecord({ path, notificationConfig, audioConfig });
 
-  const onPressStop = () => stopRecord();
+  const onPressStop = () => recorder.stopRecord();
 
-  const onPressRecordPlay = () => startAudio(path);
+  const onPressRecordPlay = () => recorder.startAudio(path);
 
-  const onPressStopAudio = () => stopAudio();
+  const onPressStopAudio = () => recorder.stopAudio();
 
   return (
     <View style={styles.background}>

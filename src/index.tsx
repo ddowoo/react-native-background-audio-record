@@ -1,5 +1,5 @@
 import { NativeModules, Platform, PermissionsAndroid } from 'react-native';
-import type { AudioConfig, NoticationConfig } from './type';
+import type { Recorder } from './type';
 export * from './type';
 
 async function reqeustRecordAndStoragePermission() {
@@ -33,44 +33,70 @@ const BackgroundAudioRecord = NativeModules.BackgroundAudioRecord
       }
     );
 
-export async function startRecord({
-  path,
-  notificationConfig,
-  audioConfig,
-}: {
-  path?: string;
-  notificationConfig?: NoticationConfig;
-  audioConfig?: AudioConfig;
-} = {}) {
-  try {
-    if (Platform.OS === 'android') {
-      if (await reqeustRecordAndStoragePermission()) {
-        BackgroundAudioRecord.startRecord(
-          path,
-          audioConfig,
-          notificationConfig
-        );
+const BgRecorder = (function () {
+  let instance: Recorder | undefined;
+  let isRecording = false;
+  let isPlaying = false;
+
+  function getPlayer(): Recorder {
+    return {
+      startRecord: async function startRecord({
+        path,
+        notificationConfig,
+        audioConfig,
+      } = {}) {
+        try {
+          if (Platform.OS === 'android') {
+            if (await reqeustRecordAndStoragePermission()) {
+              if (isRecording === false) {
+                isRecording = true;
+                BackgroundAudioRecord.startRecord(
+                  path,
+                  audioConfig,
+                  notificationConfig
+                );
+              } else {
+                console.warn('already recording...');
+              }
+            }
+          }
+        } catch (e) {
+          console.warn(e);
+        }
+      },
+      stopRecord: function stopRecord() {
+        if (Platform.OS === 'android') {
+          isRecording = false;
+          return BackgroundAudioRecord.stopRecord();
+        }
+      },
+      startAudio: function startAudio(path?: string) {
+        if (Platform.OS === 'android') {
+          if (isPlaying === false) {
+            isPlaying = true;
+            BackgroundAudioRecord.playAudio(path);
+          } else {
+            console.warn('already playing...');
+          }
+        }
+      },
+      stopAudio: function stopAudio() {
+        if (Platform.OS === 'android') {
+          isPlaying = false;
+          BackgroundAudioRecord.stopAudio();
+        }
+      },
+    };
+  }
+
+  return {
+    recorder: function () {
+      if (instance === undefined) {
+        instance = getPlayer();
       }
-    }
-  } catch (e) {
-    console.warn(e);
-  }
-}
+      return instance;
+    },
+  };
+})();
 
-export function stopRecord() {
-  if (Platform.OS === 'android') {
-    return BackgroundAudioRecord.stopRecord();
-  }
-}
-
-export function startAudio(path?: string) {
-  if (Platform.OS === 'android') {
-    BackgroundAudioRecord.playAudio(path);
-  }
-}
-
-export function stopAudio() {
-  if (Platform.OS === 'android') {
-    BackgroundAudioRecord.stopAudio();
-  }
-}
+export default BgRecorder;

@@ -56,3 +56,16 @@ export type AudioConfig = {
   audioEncodingBitRate?: number;
   audioChannels?: number;
 };
+
+export type Recorder = {
+  startRecord: (params?: startRecordParams) => void;
+  stopRecord: () => void;
+  startAudio: (path?: string) => void;
+  stopAudio: () => void;
+};
+
+export type startRecordParams = {
+  path?: string;
+  notificationConfig?: NoticationConfig;
+  audioConfig?: AudioConfig;
+};

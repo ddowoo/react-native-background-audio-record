@@ -50,16 +50,12 @@ you can also check code in Example
 ```js
 import React from 'react';
 import { Button, StyleSheet, View } from 'react-native';
-import {
-  stopRecord,
-  startRecord,
-  stopAudio,
-  startAudio,
-  type NoticationConfig,
-  type AudioConfig,
+import BgRecorder, {
   AudioSource,
   OutputFormat,
   AudioEncoder,
+  type NoticationConfig,
+  type AudioConfig,
 } from 'react-native-background-audio-record';
 import RNFS from 'react-native-fs';
 
@@ -82,11 +78,10 @@ const audioConfig: AudioConfig = {
 // ---------   recordOnBackground   ---------//
 // default path is
 // AOS : {cacheDir}/sound.m4a
-recordOnBackground();
+const recorder = BgRecorder.recorder();
 
-recordOnBackground(path);
-
-recordOnBackground(path, notificationConfig);
-
-recordOnBackground(path, notificationConfig, audioConfig);
+recorder.startRecord({ path, notificationConfig, audioConfig });
+recorder.stopRecord();
+recorder.startAudio(path);
+recorder.stopAudio();
 ```

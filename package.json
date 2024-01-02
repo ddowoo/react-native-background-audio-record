@@ -1,6 +1,6 @@
 {
   "name": "react-native-background-audio-record",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "background audio record for android",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
